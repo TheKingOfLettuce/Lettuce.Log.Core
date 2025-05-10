@@ -108,7 +108,7 @@ public class Logger {
             Path.GetFileNameWithoutExtension(callingFile), callingMethod, lineNumber);
 
         foreach(ILogDestination destination in _destinations) {
-            destination.LogMessage(logMessage);
+            destination.LogMessage(logMessage, level);
         }
     }
 
