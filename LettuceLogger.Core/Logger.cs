@@ -6,10 +6,12 @@ namespace LettuceLogger.Core;
 /// Logger class that handles writing logs to a list of <see cref="ILogDestination"/> <br/>
 /// that are formatted by a list of <see cref="ILogFormatter"/>
 /// </summary>
-public class Logger {
+public sealed class Logger : IDisposable {
     private List<ILogDestination> _destinations = new();
     private List<ILogFormatter> _formatters = new();
     private readonly string _template;
+
+    private bool _disposed;
 
     /// <summary>
     /// Takes in a template for how log messages should be formatted
@@ -24,6 +26,7 @@ public class Logger {
     /// </summary>
     /// <param name="destination">the place for logs to go</param>
     public void AddDestination(ILogDestination destination) {
+        ObjectDisposedException.ThrowIf(_disposed, this);
         _destinations.Add(destination);
     }
 
@@ -32,11 +35,12 @@ public class Logger {
     /// </summary>
     /// <param name="formatter">the log formatter to add</param>
     public void AddFormatter(ILogFormatter formatter) {
+        ObjectDisposedException.ThrowIf(_disposed, this);
         _formatters.Add(formatter);
     }
 
     /// <summary>
-    /// Logs a <see cref="LogEventLevel.VERBOSE"/> message with conext info
+    /// Logs a <see cref="LogEventLevel.VERBOSE"/> message with context info
     /// </summary>
     /// <param name="message">the message to log</param>
     /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
@@ -46,7 +50,7 @@ public class Logger {
         => LogMessage(LogEventLevel.VERBOSE, message, callingFile, callingMethod, lineNumber);
     
     /// <summary>
-    /// Logs a <see cref="LogEventLevel.DEBUG"/> message with conext info
+    /// Logs a <see cref="LogEventLevel.DEBUG"/> message with context info
     /// </summary>
     /// <param name="message">the message to log</param>
     /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
@@ -56,7 +60,7 @@ public class Logger {
         => LogMessage(LogEventLevel.DEBUG, message, callingFile, callingMethod, lineNumber);
     
     /// <summary>
-    /// Logs a <see cref="LogEventLevel.INFORMATION"/> message with conext info
+    /// Logs a <see cref="LogEventLevel.INFORMATION"/> message with context info
     /// </summary>
     /// <param name="message">the message to log</param>
     /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
@@ -66,7 +70,7 @@ public class Logger {
         => LogMessage(LogEventLevel.INFORMATION, message, callingFile, callingMethod, lineNumber);
     
     /// <summary>
-    /// Logs a <see cref="LogEventLevel.WARNING"/> message with conext info
+    /// Logs a <see cref="LogEventLevel.WARNING"/> message with context info
     /// </summary>
     /// <param name="message">the message to log</param>
     /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
@@ -76,7 +80,7 @@ public class Logger {
         => LogMessage(LogEventLevel.WARNING, message, callingFile, callingMethod, lineNumber);
     
     /// <summary>
-    /// Logs a <see cref="LogEventLevel.ERROR"/> message with conext info
+    /// Logs a <see cref="LogEventLevel.ERROR"/> message with context info
     /// </summary>
     /// <param name="message">the message to log</param>
     /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
@@ -86,7 +90,7 @@ public class Logger {
         => LogMessage(LogEventLevel.ERROR, message, callingFile, callingMethod, lineNumber);
     
     /// <summary>
-    /// Logs a <see cref="LogEventLevel.FATAL"/> message with conext info
+    /// Logs a <see cref="LogEventLevel.FATAL"/> message with context info
     /// </summary>
     /// <param name="message">the message to log</param>
     /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
@@ -96,7 +100,7 @@ public class Logger {
         => LogMessage(LogEventLevel.FATAL, message, callingFile, callingMethod, lineNumber);
 
     /// <summary>
-    /// Logs a message with conext info and a given <see cref="LogEventLevel"/>
+    /// Logs a message with context info and a given <see cref="LogEventLevel"/>
     /// </summary>
     /// <param name="level">the logging level</param>
     /// <param name="message">the message to log</param>
@@ -104,6 +108,7 @@ public class Logger {
     /// <param name="callingMethod">the calling method via <see cref="CallerMemberNameAttribute"/></param>
     /// <param name="lineNumber">the calling line number via <see cref="CallerLineNumberAttribute"/></param>
     public void LogMessage(LogEventLevel level, string message, [CallerFilePath]string callingFile = "", [CallerMemberName]string callingMethod = "", [CallerLineNumber]int lineNumber = -1) {
+        ObjectDisposedException.ThrowIf(_disposed, this);
         string logMessage = FormatMessage(level, message, 
             Path.GetFileNameWithoutExtension(callingFile), callingMethod, lineNumber);
 
@@ -131,5 +136,22 @@ public class Logger {
         }
 
         return toReturn;
+    }
+
+    /// <summary>
+    /// Disposes of the logger by disposing of any <see cref="ILogDestination"/>
+    /// </summary>
+    public void Dispose() {
+        if (_disposed) {
+            return;
+        }
+
+        foreach (ILogDestination destination in _destinations) {
+            if (destination is IDisposable disposable) {
+                disposable.Dispose();
+            }
+        }
+
+        _disposed = true;
     }
 }
