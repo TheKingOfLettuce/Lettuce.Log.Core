@@ -16,14 +16,14 @@ jobs:
       dotnet-version: 8.0.x
       configuration: Release
       upload-artifact: true
-      artifact-name: LettuceLogger.Core_${{ github.ref_name }}
-      bin-dir: LettuceLogger.Core
-      project-path: LettuceLogger.Core/LettuceLogger.Core.csproj
+      artifact-name: Lettuce.Log.Core_${{ github.ref_name }}
+      bin-dir: Lettuce.Log.Core
+      project-path: Lettuce.Log.Core/Lettuce.Log.Core.csproj
   deploy-package-github:
     uses: TheKingOfLettuce/LettuceGithubWorkflows/.github/workflows/Upload-Nuget-dotnet.yml@main
     needs: create-package-artifact
     with:
-      artifact-name: LettuceLogger.Core_${{ github.ref_name }}
+      artifact-name: Lettuce.Log.Core_${{ github.ref_name }}
       artifact-id: ${{ needs.create-package-artifact.outputs.artifact-id }}
       nuget-source: https://nuget.pkg.github.com/TheKingOfLettuce/index.json
     secrets:
@@ -32,7 +32,7 @@ jobs:
     uses: TheKingOfLettuce/LettuceGithubWorkflows/.github/workflows/Upload-Nuget-dotnet.yml@main
     needs: create-package-artifact
     with:
-      artifact-name: LettuceLogger.Core_${{ github.ref_name }}
+      artifact-name: Lettuce.Log.Core_${{ github.ref_name }}
       artifact-id: ${{ needs.create-package-artifact.outputs.artifact-id }}
       nuget-source: https://nuget.org
     secrets:

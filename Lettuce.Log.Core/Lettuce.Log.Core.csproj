@@ -4,10 +4,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Title>LettuceLogger.Core</Title>
+    <Title>Lettuce.Log.Core</Title>
     <Authors>Lettuce Studios</Authors>
     <Description>The core of the Lettuce Logging System to allow for destinations and formatting</Description>
-    <Version>2.1.0</Version>
+    <Version>3.0.0</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 

@@ -1,4 +1,4 @@
-namespace LettuceLogger.Core;
+namespace Lettuce.Log.Core;
 
 /// <summary>
 /// Formatter which formats a template by searching for the <see cref="FormatKey"/> and replaces it with <see cref="GetFormat"/>

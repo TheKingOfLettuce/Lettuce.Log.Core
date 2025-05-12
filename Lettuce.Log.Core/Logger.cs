@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace LettuceLogger.Core;
+namespace Lettuce.Log.Core;
 
 /// <summary>
 /// Logger class that handles writing logs to a list of <see cref="ILogDestination"/> <br/>

@@ -1,4 +1,4 @@
-namespace LettuceLogger.Core;
+namespace Lettuce.Log.Core;
 
 /// <summary>
 /// Enum for log levels

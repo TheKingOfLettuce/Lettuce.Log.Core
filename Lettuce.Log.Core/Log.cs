@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace LettuceLogger.Core;
+namespace Lettuce.Log.Core;
 
 /// <summary>
 /// Static wrapped <see cref="Logger"/> to allow for easy global logging

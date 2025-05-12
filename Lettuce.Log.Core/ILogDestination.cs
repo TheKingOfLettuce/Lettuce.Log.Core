@@ -1,4 +1,4 @@
-namespace LettuceLogger.Core;
+namespace Lettuce.Log.Core;
 
 /// <summary>
 /// Simple interface to represent a place where a log message can go
