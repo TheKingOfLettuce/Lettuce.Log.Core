@@ -34,7 +34,7 @@ These objects format the log messages that come in. Each logger when constructin
 
 For example, here is the default template: `{Level} ({File}/{Method} at {Line}) {Message}`
 
-By default, `Logger` has the following formatter that get run for each log:
+By default, `Logger` has the following formatters that get run for each log:
 - `{Message}` | The log message
 - `{Level}` &nbsp;&nbsp;&nbsp;&nbsp;| The logging level of the message
 - `{File}` &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| The calling file the log originated from
