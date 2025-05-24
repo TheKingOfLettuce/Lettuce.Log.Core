@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFrameworks>net6.0;net7.0;net8.0;net9.0;netstandard2.1</TargetFrameworks>
+    <ImplicitUsings>false</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Lettuce.Log.Core</Title>
     <Authors>Lettuce Studios</Authors>
     <Description>The core of the Lettuce Logging System to allow for destinations and formatting</Description>
-    <Version>3.0.1</Version>
+    <Version>3.0.2</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
