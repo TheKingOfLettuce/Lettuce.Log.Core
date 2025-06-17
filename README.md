@@ -10,12 +10,15 @@ The core of the logging system to allow for ease of formatting logs and sending 
 `Lettuce.Log.Core` is available on [nuget](https://www.nuget.org/packages/Lettuce.Log.Core/)
 
 ```csharp
-Logger logger = new Logger(Log.DEFAULT_TEMPLATE);
-// logger.AddDestination(...);
-// logger.AddFormatter(...);
+// use global logger
+Log.Logger.AddDestination(...);
+Log.Logger.AddFormatter(...);
 
-logger.Info("This is an information message");
-logger.Error("This is an error message");
+Log.Info("This is an information message");
+Log.Error("This is an error message");
+
+// or instantiate your own logger
+Logger logger = new Logger(Log.DEFAULT_TEMPLATE);
 ```
 
 
@@ -35,11 +38,13 @@ These objects format the log messages that come in. Each logger when constructin
 For example, here is the default template: `{Level} ({File}/{Method} at {Line}) {Message}`
 
 By default, `Logger` has the following formatters that get run for each log:
-- `{Message}` | The log message
-- `{Level}` &nbsp;&nbsp;&nbsp;&nbsp;| The logging level of the message
-- `{File}` &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| The calling file the log originated from
-- `{Method}` &nbsp;&nbsp;| The calling method the log originated from
-- `{Line}` &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| The line number the log originated from
+| Template | Content |
+| -------- | --------------------- |
+| `{Message}`| The log message |
+| `{Level}` | The logging level of the message |
+| `{File}` | The calling file the log originated from |
+| `{Method}` | The calling method the log originated from |
+| `{Line}` | The line number the log originated from |
 
 
 ### ILogDestination
