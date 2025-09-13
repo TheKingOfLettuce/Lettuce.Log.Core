@@ -9,18 +9,24 @@ namespace Lettuce.Log.Core {
     /// that are formatted by a list of <see cref="ILogFormatter"/>
     /// </summary>
     public sealed class Logger : IDisposable {
+        /// <summary>
+        /// The current <see cref="LogEventLevel"/> this log instance is set to
+        /// </summary>
+        public LogEventLevel CurrentLevel => _currentLevel;
+
         private List<ILogDestination> _destinations = new List<ILogDestination>();
         private List<ILogFormatter> _formatters = new List<ILogFormatter>();
         private readonly string _template;
+        private LogEventLevel _currentLevel;
 
         private bool _disposed;
 
         /// <summary>
         /// Takes in a template for how log messages should be formatted
         /// </summary>
-        /// <param name="temaplte">the template to use for log formats</param>
-        public Logger(string temaplte) {
-            _template = temaplte;
+        /// <param name="template">the template to use for log formats</param>
+        public Logger(string template) {
+            _template = template;
         }
 
         /// <summary>
@@ -44,13 +50,19 @@ namespace Lettuce.Log.Core {
         }
 
         /// <summary>
+        /// Changes the <see cref="LogEventLevel"/> to the provided <paramref name="level"/>
+        /// </summary>
+        /// <param name="level">the new <see cref="LogEventLevel"/> to set</param>
+        public void ChangeLevel(LogEventLevel level) => _currentLevel = level;
+
+        /// <summary>
         /// Logs a <see cref="LogEventLevel.VERBOSE"/> message with context info
         /// </summary>
         /// <param name="message">the message to log</param>
         /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
         /// <param name="callingMethod">the calling method via <see cref="CallerMemberNameAttribute"/></param>
         /// <param name="lineNumber">the calling line number via <see cref="CallerLineNumberAttribute"/></param>
-        public void Verbose(string message, [CallerFilePath]string callingFile = "", [CallerMemberName]string callingMethod = "", [CallerLineNumber]int lineNumber = -1)
+        public void Verbose(string message, [CallerFilePath] string callingFile = "", [CallerMemberName] string callingMethod = "", [CallerLineNumber] int lineNumber = -1)
             => LogMessage(LogEventLevel.VERBOSE, message, callingFile, callingMethod, lineNumber);
         
         /// <summary>
@@ -114,6 +126,11 @@ namespace Lettuce.Log.Core {
         public void LogMessage(LogEventLevel level, string message, [CallerFilePath]string callingFile = "", [CallerMemberName]string callingMethod = "", [CallerLineNumber]int lineNumber = -1) {
             if (_disposed)
                 throw new ObjectDisposedException("Logger has been disposed");
+
+            if (_currentLevel > level) {
+                return;
+            }
+
             string logMessage = FormatMessage(level, message, 
                 Path.GetFileNameWithoutExtension(callingFile), callingMethod, lineNumber);
 

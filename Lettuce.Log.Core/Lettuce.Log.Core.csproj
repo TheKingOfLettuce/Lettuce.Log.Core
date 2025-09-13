@@ -7,7 +7,7 @@
     <Title>Lettuce.Log.Core</Title>
     <Authors>Lettuce Studios</Authors>
     <Description>The core of the Lettuce Logging System to allow for destinations and formatting</Description>
-    <Version>3.0.2</Version>
+    <Version>3.1.0</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
