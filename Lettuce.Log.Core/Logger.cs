@@ -25,8 +25,10 @@ namespace Lettuce.Log.Core {
         /// Takes in a template for how log messages should be formatted
         /// </summary>
         /// <param name="template">the template to use for log formats</param>
-        public Logger(string template) {
+        /// <param name="startingLevel">the starting <see cref="LogEventLevel"/> of this logger, defaults to <see cref="LogEventLevel.INFORMATION"/></param>
+        public Logger(string template, LogEventLevel startingLevel = LogEventLevel.INFORMATION) {
             _template = template;
+            _currentLevel = startingLevel;
         }
 
         /// <summary>
