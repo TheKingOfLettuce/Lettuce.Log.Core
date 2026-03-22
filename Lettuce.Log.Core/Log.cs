@@ -9,7 +9,7 @@ namespace Lettuce.Log.Core {
         /// <summary>
         /// Default template used for the lazy initialized logger
         /// </summary>
-        public const string DEFAULT_TEMPLATE = "{Level} ({File}/{Method} at {Line}) {Message}";
+        public const string DEFAULT_TEMPLATE = "{Level} {Message}";
 
         /// <summary>
         /// The wrapped <see cref="Logger"/>
@@ -37,55 +37,34 @@ namespace Lettuce.Log.Core {
         }
 
         /// <inheritdoc cref="Logger.Verbose"/>
-        public static void Verbose(string message, 
-            [CallerMemberName]string methodName = "", 
-            [CallerFilePath]string filePath = "",
-            [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.VERBOSE, message, methodName, filePath, lineNumber);
+        public static void Verbose(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.VERBOSE, message, dynamicFormats);
         
         /// <inheritdoc cref="Logger.Debug"/>
-        public static void Debug(string message, 
-            [CallerMemberName]string methodName = "", 
-            [CallerFilePath]string filePath = "",
-            [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.DEBUG, message, methodName, filePath, lineNumber);
+        public static void Debug(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.DEBUG, message, dynamicFormats);
         
         /// <inheritdoc cref="Logger.Info"/>
-        public static void Info(string message, 
-            [CallerMemberName]string methodName = "", 
-            [CallerFilePath]string filePath = "",
-            [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.INFORMATION, message, methodName, filePath, lineNumber);
+        public static void Info(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.INFORMATION, message, dynamicFormats);
         
         /// <inheritdoc cref="Logger.Warning"/>
-        public static void Warning(string message, 
-            [CallerMemberName]string methodName = "", 
-            [CallerFilePath]string filePath = "",
-            [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.WARNING, message, methodName, filePath, lineNumber);
+        public static void Warning(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.WARNING, message, dynamicFormats);
         
         /// <inheritdoc cref="Logger.Error"/>
-        public static void Error(string message, 
-            [CallerMemberName]string methodName = "", 
-            [CallerFilePath]string filePath = "",
-            [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.ERROR, message, methodName, filePath, lineNumber);
+        public static void Error(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.ERROR, message, dynamicFormats);
         
         /// <inheritdoc cref="Logger.Fatal"/>
-        public static void Fatal(string message, 
-            [CallerMemberName]string methodName = "", 
-            [CallerFilePath]string filePath = "",
-            [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.FATAL, message, methodName, filePath, lineNumber);
+        public static void Fatal(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.FATAL, message, dynamicFormats);
 
 
         /// <inheritdoc cref="Logger.LogMessage"/>
-        public static void LogMessage(LogEventLevel logLevel, string message,
-            [CallerMemberName]string methodName = "", 
-            [CallerFilePath]string filePath = "",
-            [CallerLineNumber]int lineNumber = -1)
+        public static void LogMessage(LogEventLevel logLevel, string message, ILogFormatter[]? dynamicFormats = null)
         {
-            Logger.LogMessage(logLevel, message, filePath, methodName, lineNumber);
+            Logger.LogMessage(logLevel, message, dynamicFormats);
         }
     }
 }
