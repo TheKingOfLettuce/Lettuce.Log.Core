@@ -1,6 +1,4 @@
-using System.Runtime.CompilerServices;
 using System;
-using System.IO;
 using System.Collections.Generic;
 
 namespace Lettuce.Log.Core {
@@ -61,71 +59,57 @@ namespace Lettuce.Log.Core {
         /// Logs a <see cref="LogEventLevel.VERBOSE"/> message with context info
         /// </summary>
         /// <param name="message">the message to log</param>
-        /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
-        /// <param name="callingMethod">the calling method via <see cref="CallerMemberNameAttribute"/></param>
-        /// <param name="lineNumber">the calling line number via <see cref="CallerLineNumberAttribute"/></param>
-        public void Verbose(string message, [CallerFilePath] string callingFile = "", [CallerMemberName] string callingMethod = "", [CallerLineNumber] int lineNumber = -1)
-            => LogMessage(LogEventLevel.VERBOSE, message, callingFile, callingMethod, lineNumber);
+        /// <param name="dynamicFormats">(optional) the list of <see cref="ILogFormatter"/> to use for log message formatting that are not a part of the logger</param>
+        public void Verbose(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.VERBOSE, message, dynamicFormats);
         
         /// <summary>
         /// Logs a <see cref="LogEventLevel.DEBUG"/> message with context info
         /// </summary>
         /// <param name="message">the message to log</param>
-        /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
-        /// <param name="callingMethod">the calling method via <see cref="CallerMemberNameAttribute"/></param>
-        /// <param name="lineNumber">the calling line number via <see cref="CallerLineNumberAttribute"/></param>
-        public void Debug(string message, [CallerFilePath]string callingFile = "", [CallerMemberName]string callingMethod = "", [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.DEBUG, message, callingFile, callingMethod, lineNumber);
+        /// <param name="dynamicFormats">(optional) the list of <see cref="ILogFormatter"/> to use for log message formatting that are not a part of the logger</param>
+        public void Debug(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.DEBUG, message, dynamicFormats);
         
         /// <summary>
         /// Logs a <see cref="LogEventLevel.INFORMATION"/> message with context info
         /// </summary>
         /// <param name="message">the message to log</param>
-        /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
-        /// <param name="callingMethod">the calling method via <see cref="CallerMemberNameAttribute"/></param>
-        /// <param name="lineNumber">the calling line number via <see cref="CallerLineNumberAttribute"/></param>
-        public void Info(string message, [CallerFilePath]string callingFile = "", [CallerMemberName]string callingMethod = "", [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.INFORMATION, message, callingFile, callingMethod, lineNumber);
+        /// <param name="dynamicFormats">(optional) the list of <see cref="ILogFormatter"/> to use for log message formatting that are not a part of the logger</param>
+        public void Info(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.INFORMATION, message, dynamicFormats);
         
         /// <summary>
         /// Logs a <see cref="LogEventLevel.WARNING"/> message with context info
         /// </summary>
         /// <param name="message">the message to log</param>
-        /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
-        /// <param name="callingMethod">the calling method via <see cref="CallerMemberNameAttribute"/></param>
-        /// <param name="lineNumber">the calling line number via <see cref="CallerLineNumberAttribute"/></param>
-        public void Warning(string message, [CallerFilePath]string callingFile = "", [CallerMemberName]string callingMethod = "", [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.WARNING, message, callingFile, callingMethod, lineNumber);
+        /// <param name="dynamicFormats">(optional) the list of <see cref="ILogFormatter"/> to use for log message formatting that are not a part of the logger</param>
+        public void Warning(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.WARNING, message, dynamicFormats);
         
         /// <summary>
         /// Logs a <see cref="LogEventLevel.ERROR"/> message with context info
         /// </summary>
         /// <param name="message">the message to log</param>
-        /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
-        /// <param name="callingMethod">the calling method via <see cref="CallerMemberNameAttribute"/></param>
-        /// <param name="lineNumber">the calling line number via <see cref="CallerLineNumberAttribute"/></param>
-        public void Error(string message, [CallerFilePath]string callingFile = "", [CallerMemberName]string callingMethod = "", [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.ERROR, message, callingFile, callingMethod, lineNumber);
+        /// <param name="dynamicFormats">(optional) the list of <see cref="ILogFormatter"/> to use for log message formatting that are not a part of the logger</param>
+        public void Error(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.ERROR, message, dynamicFormats);
         
         /// <summary>
         /// Logs a <see cref="LogEventLevel.FATAL"/> message with context info
         /// </summary>
         /// <param name="message">the message to log</param>
-        /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
-        /// <param name="callingMethod">the calling method via <see cref="CallerMemberNameAttribute"/></param>
-        /// <param name="lineNumber">the calling line number via <see cref="CallerLineNumberAttribute"/></param>
-        public void Fatal(string message, [CallerFilePath]string callingFile = "", [CallerMemberName]string callingMethod = "", [CallerLineNumber]int lineNumber = -1)
-            => LogMessage(LogEventLevel.FATAL, message, callingFile, callingMethod, lineNumber);
+        /// <param name="dynamicFormats">(optional) the list of <see cref="ILogFormatter"/> to use for log message formatting that are not a part of the logger</param>
+        public void Fatal(string message, ILogFormatter[]? dynamicFormats = null)
+            => LogMessage(LogEventLevel.FATAL, message, dynamicFormats);
 
         /// <summary>
         /// Logs a message with context info and a given <see cref="LogEventLevel"/>
         /// </summary>
         /// <param name="level">the logging level</param>
         /// <param name="message">the message to log</param>
-        /// <param name="callingFile">the calling file via <see cref="CallerFilePathAttribute"/></param>
-        /// <param name="callingMethod">the calling method via <see cref="CallerMemberNameAttribute"/></param>
-        /// <param name="lineNumber">the calling line number via <see cref="CallerLineNumberAttribute"/></param>
-        public void LogMessage(LogEventLevel level, string message, [CallerFilePath]string callingFile = "", [CallerMemberName]string callingMethod = "", [CallerLineNumber]int lineNumber = -1) {
+        /// <param name="dynamicFormats">(optional) the list of <see cref="ILogFormatter"/> to use for log message formatting that are not a part of the logger</param>
+        public void LogMessage(LogEventLevel level, string message, ILogFormatter[]? dynamicFormats = null) {
             if (_disposed)
                 throw new ObjectDisposedException("Logger has been disposed");
 
@@ -133,30 +117,28 @@ namespace Lettuce.Log.Core {
                 return;
             }
 
-            string logMessage = FormatMessage(level, message, 
-                Path.GetFileNameWithoutExtension(callingFile), callingMethod, lineNumber);
+            string logMessage = FormatMessage(level, message, dynamicFormats);
 
             foreach(ILogDestination destination in _destinations) {
                 destination.LogMessage(logMessage, level);
             }
         }
 
-        private string FormatMessage(LogEventLevel level, string message, string file, string method, int line) {
+        private string FormatMessage(LogEventLevel level, string message, ILogFormatter[]? dynamicFormats = null) {
             const string MESSAGE_KEY = "{Message}";
             const string LEVEL_KEY = "{Level}";
-            const string FILE_KEY = "{File}";
-            const string METHOD_KEY = "{Method}";
-            const string LINE_KEY = "{Line}";
             
             string toReturn = _template;
 
             toReturn = toReturn.Replace(MESSAGE_KEY, message);
             toReturn = toReturn.Replace(LEVEL_KEY, level.ToString().PadLeft(11));
-            toReturn = toReturn.Replace(FILE_KEY, file);
-            toReturn = toReturn.Replace(METHOD_KEY, method);
-            toReturn = toReturn.Replace(LINE_KEY, line.ToString());
             foreach (ILogFormatter formatter in _formatters) {
                 toReturn = toReturn.Replace(formatter.FormatKey, formatter.GetFormat());
+            }
+            if (dynamicFormats != null) {
+                foreach(ILogFormatter formatter in dynamicFormats) {
+                    toReturn = toReturn.Replace(formatter.FormatKey, formatter.GetFormat());
+                }
             }
 
             return toReturn;
