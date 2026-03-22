@@ -24,27 +24,22 @@ Logger logger = new Logger(Log.DEFAULT_TEMPLATE);
 
 ### Logger
 
-`Logger` objects are where you log messages to certain `LogEventLevel`. Every log message is context aware, making using of [Microsoft's Caller Attributes](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/caller-information), where the calling file, method and line number are all passed with each log call.
+`Logger` objects are where you log messages to certain `LogEventLevel`. They are also the collection of `ILogFormatter` and `ILogDestination` objects.
 
-`Logger` objects are also the collection of `ILogFormatter` and `ILogDestination` objects.
-
-There is also a statically wrapped `Logger` called `Log` to allow for global logging around your systems without having to pass a `Logger` instance around
+There is also a statically wrapped `Logger` called `Log` to allow for quick and global logging around your systems without having to pass a `Logger` instance around
 
 
 ### ILogFormatter
 
 These objects format the log messages that come in. Each logger when constructing takes in a template for how the log message should be formatted before being fully logged. These templates are essentially keys to look in a string to insert the formatted string you want.
 
-For example, here is the default template: `{Level} ({File}/{Method} at {Line}) {Message}`
+For example, here is the default template: `{Level} {Message}`
 
 By default, `Logger` has the following formatters that get run for each log:
-| Template | Content |
-| -------- | --------------------- |
-| `{Message}`| The log message |
-| `{Level}` | The logging level of the message |
-| `{File}` | The calling file the log originated from |
-| `{Method}` | The calling method the log originated from |
-| `{Line}` | The line number the log originated from |
+| Template | Content
+| -------- | ---------------------
+| `{Message}`| The log message
+| `{Level}` | The logging level of the message
 
 
 ### ILogDestination
