@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System;
 
 namespace Lettuce.Log.Core {
