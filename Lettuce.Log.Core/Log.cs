@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 namespace Lettuce.Log.Core {
     /// <summary>
@@ -15,24 +16,29 @@ namespace Lettuce.Log.Core {
         /// </summary>
         public static Logger Logger => _wrappedLogger;
 
-        private static Logger _wrappedLogger;
+        private static volatile Logger _wrappedLogger;
 
         static Log() {
             _wrappedLogger = new Logger(DEFAULT_TEMPLATE);
         }
 
         /// <summary>
-        /// Sets the statically wrapped logger
+        /// Sets the statically wrapped logger <br/>
+        /// The previous logger is disposed if <paramref name="disposePrevious"/> is true and it is not the same instance as <paramref name="logger"/>
         /// </summary>
         /// <param name="logger">the new logger to wrap</param>
+        /// <param name="disposePrevious">whether to dispose the previously wrapped logger, defaults to true <br/>
+        /// pass false if the previous logger (or its destinations) is still used elsewhere</param>
         /// <exception cref="ArgumentException">throws if the provided logger is null</exception>
-        public static void ReassignLogger(Logger logger) {
+        public static void ReassignLogger(Logger logger, bool disposePrevious = true) {
             if (logger == null) {
                 throw new ArgumentException("Cannot assign null logger to static wrapped logger", nameof(logger));
             }
 
-            _wrappedLogger.Dispose();
-            _wrappedLogger = logger;
+            Logger previous = Interlocked.Exchange(ref _wrappedLogger, logger);
+            if (disposePrevious &&!ReferenceEquals(previous, logger)) {
+                previous.Dispose();
+            }
         }
 
         /// <inheritdoc cref="Logger.Verbose"/>

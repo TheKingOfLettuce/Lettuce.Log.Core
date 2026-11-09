@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Lettuce.Log.Core {
     /// <summary>
@@ -12,12 +11,15 @@ namespace Lettuce.Log.Core {
         /// </summary>
         public LogEventLevel CurrentLevel => _currentLevel;
 
-        private List<ILogDestination> _destinations = new List<ILogDestination>();
-        private List<ILogFormatter> _formatters = new List<ILogFormatter>();
+        // copy-on-write arrays: writers swap in a new array under _writeLock,
+        // readers (logging) grab the current array without locking and never see it change
+        private volatile ILogDestination[] _destinations = Array.Empty<ILogDestination>();
+        private volatile ILogFormatter[] _formatters = Array.Empty<ILogFormatter>();
+        private readonly object _writeLock = new object();
         private readonly string _template;
-        private LogEventLevel _currentLevel;
+        private volatile LogEventLevel _currentLevel;
 
-        private bool _disposed;
+        private volatile bool _disposed;
 
         /// <summary>
         /// Takes in a template for how log messages should be formatted
@@ -34,9 +36,11 @@ namespace Lettuce.Log.Core {
         /// </summary>
         /// <param name="destination">the place for logs to go</param>
         public void AddDestination(ILogDestination destination) {
-            if (_disposed)
-                throw new ObjectDisposedException("Logger has been disposed");
-            _destinations.Add(destination);
+            lock (_writeLock) {
+                if (_disposed)
+                    throw new ObjectDisposedException("Logger has been disposed");
+                _destinations = Append(_destinations, destination);
+            }
         }
 
         /// <summary>
@@ -44,9 +48,18 @@ namespace Lettuce.Log.Core {
         /// </summary>
         /// <param name="formatter">the log formatter to add</param>
         public void AddFormatter(ILogFormatter formatter) {
-            if (_disposed)
-                throw new ObjectDisposedException("Logger has been disposed");
-            _formatters.Add(formatter);
+            lock (_writeLock) {
+                if (_disposed)
+                    throw new ObjectDisposedException("Logger has been disposed");
+                _formatters = Append(_formatters, formatter);
+            }
+        }
+
+        private static T[] Append<T>(T[] source, T item) {
+            T[] result = new T[source.Length + 1];
+            Array.Copy(source, result, source.Length);
+            result[source.Length] = item;
+            return result;
         }
 
         /// <summary>
@@ -148,17 +161,21 @@ namespace Lettuce.Log.Core {
         /// Disposes of the logger by disposing of any <see cref="ILogDestination"/>
         /// </summary>
         public void Dispose() {
-            if (_disposed) {
-                return;
+            ILogDestination[] destinations;
+            lock (_writeLock) {
+                if (_disposed) {
+                    return;
+                }
+
+                _disposed = true;
+                destinations = _destinations;
             }
 
-            foreach (ILogDestination destination in _destinations) {
+            foreach (ILogDestination destination in destinations) {
                 if (destination is IDisposable disposable) {
                     disposable.Dispose();
                 }
             }
-
-            _disposed = true;
         }
     }
 }
