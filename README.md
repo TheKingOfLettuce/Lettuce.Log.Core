@@ -36,10 +36,10 @@ These objects format the log messages that come in. Each logger when constructin
 For example, here is the default template: `{Level} {Message}`
 
 By default, `Logger` has the following formatters that get run for each log:
-| Template | Content
-| -------- | ---------------------
-| `{Message}`| The log message
-| `{Level}` | The logging level of the message
+| Template | Content |
+| -------- | --------------------- |
+| `{Message}`| The log message |
+| `{Level}` | The logging level of the message |
 
 
 ### ILogDestination

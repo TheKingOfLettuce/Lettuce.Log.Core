@@ -3,12 +3,16 @@ name: Build
 on:
   push:
     branches: ["**"]
+    paths:
+        - '**.cs'
+        - '**.csproj'
+        - '**.slnx'
   pull_request:
     branches: [ "**" ]
 
 jobs:
   build:
-    uses: TheKingOfLettuce/LettuceGithubWorkflows/.github/workflows/Build-dotnet.yml@main
+    uses: TheKingOfLettuce/LettuceGithubWorkflows/.github/workflows/Build-and-Test-dotnet.yml@main
     with:
       dotnet-version: 10.0.x
       configuration: Release
