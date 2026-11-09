@@ -3,6 +3,10 @@ name: Build
 on:
   push:
     branches: ["**"]
+    paths:
+        - '**.cs'
+        - '**.csproj'
+        - '**.slnx'
   pull_request:
     branches: [ "**" ]
 
